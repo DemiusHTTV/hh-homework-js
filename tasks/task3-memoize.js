@@ -7,7 +7,17 @@
 */
 
 function memoize(fn) {
-  // TODO: реализуйте
+  const memoMap = new Map();
+  function memoizedFunc() {
+    const stringArguments = JSON.stringify(arguments);
+    if (memoMap.has(stringArguments)) {
+      return memoMap.get(stringArguments);
+    }
+    const result = fn(...arguments);
+    memoMap.set(stringArguments, result);
+    return result;
+  }
+  return memoizedFunc;
 }
 
 const slowAdd = (a, b) => {

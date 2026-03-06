@@ -7,7 +7,22 @@
 */
 
 function typedObject(schema) {
-  // TODO: реализуйте
+  try {
+    const handler = {
+      set(_, prop, value) {
+        const valueType = schema[prop];
+        const recievedType = typeof value;
+        if (valueType !== recievedType) {
+          throw new Error(
+            `Type '${recievedType}' is not assignable to type '${valueType}'`,
+          );
+        }
+      },
+    };
+    return new Proxy({}, handler);
+  } catch (error) {
+    console.error(error);
+  }
 }
 
 const user = typedObject({
