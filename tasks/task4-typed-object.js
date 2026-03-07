@@ -7,22 +7,20 @@
 */
 
 function typedObject(schema) {
-  try {
-    const handler = {
-      set(_, prop, value) {
-        const valueType = schema[prop];
-        const recievedType = typeof value;
-        if (valueType !== recievedType) {
-          throw new Error(
-            `Type '${recievedType}' is not assignable to type '${valueType}'`,
-          );
-        }
-      },
-    };
-    return new Proxy({}, handler);
-  } catch (error) {
-    console.error(error);
-  }
+  const handler = {
+    set(target, prop, value) {
+      const valueType = schema[prop];
+      const receivedType = typeof value;
+      if (valueType !== receivedType) {
+        throw new Error(
+          `Type '${receivedType}' is not assignable to type '${valueType}'`,
+        );
+      }
+
+      target[prop] = value;
+    },
+  };
+  return new Proxy({}, handler);
 }
 
 const user = typedObject({
@@ -31,5 +29,7 @@ const user = typedObject({
 });
 
 user.name = "Ivan"; // выполнится
-user.age = 20;      // выполнится
+user.age = 20; // выполнится
 user.age = "20";    // должно выбросить ошибку
+
+console.log(user);
