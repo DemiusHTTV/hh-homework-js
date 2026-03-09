@@ -7,7 +7,13 @@
 */
 
 function typedObject(schema) {
-  // TODO: реализуйте
+  return function(object){
+    for (const key in schema) {
+      if (typeof object[key] !== schema[key]) {
+        throw new TypeError('Error: Invalid type');
+      }
+    }
+  }
 }
 
 const user = typedObject({
