@@ -9,6 +9,10 @@
 
 function promiseAll(promises) {
   return new Promise((resolve, reject) => {
+    if (promises.length === 0) {
+      resolve([]);
+      return;
+    }
     const results = [];
     let resolvedCount = 0;
     promises.forEach(((promise, index)=>{
